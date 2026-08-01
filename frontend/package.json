@@ -42,7 +42,7 @@
     "less": "4.8.1",
     "prettier": "3.9.6",
     "sass": "1.102.0",
-    "typescript": "5.0.4",
+    "typescript": "7.0.2",
     "vitest": "3.2.7"
   }
 }
