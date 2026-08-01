@@ -18,9 +18,9 @@
 | 项目 | 当前状态 |
 | --- | --- |
 | 产品定义 | 待补充 |
-| 系统架构 | 技术基线已确定，详细设计待补充 |
-| 开发环境 | 待脚手架完成后开放 |
-| UAT | 本机 Docker，待部署配置完成 |
+| 系统架构 | 前后端分层基础框架已初始化 |
+| 开发环境 | 可用 |
+| UAT | 本机 Docker Compose，配置已就绪 |
 | Production | `server244` Docker，待部署配置完成 |
 
 ## 技术架构
@@ -43,29 +43,43 @@ flowchart LR
 
 ```text
 tree-creative/
-├── frontend/           # Umi Max 前端应用（待初始化）
-├── backend/            # FastAPI 后端应用（待初始化）
-├── deploy/             # Docker Compose 与环境部署配置（待初始化）
-├── scripts/            # 可重复执行的工程与运维脚本（待初始化）
-├── tests/              # 跨服务与端到端测试（待初始化）
+├── frontend/           # Umi Max 前端应用
+├── backend/            # FastAPI API、模块、基础设施与 Worker
+├── deploy/             # Docker Compose 与环境部署配置
 ├── agent-guides/       # Agent 必读规范
 └── .github/            # GitHub 协作、治理与 CI/CD 配置
 ```
 
-目录会随脚手架落地创建；本节是约定，不代表对应模块已经可用。
-
 ## 快速开始
 
-开发命令将在前后端脚手架初始化后补充，并必须保证从全新环境可重复执行。
+```bash
+cp .env.example .env
+make setup
+```
+
+分别启动前后端开发服务：
+
+```bash
+make dev-backend
+make dev-frontend
+```
 
 | 操作 | 命令 |
 | --- | --- |
-| 安装依赖 | 待定义 |
-| 启动开发环境 | 待定义 |
-| 运行测试 | 待定义 |
-| 代码检查 | 待定义 |
-| 构建 | 待定义 |
-| 启动 UAT | 待定义 |
+| 安装依赖 | `make setup` |
+| 启动前端 | `make dev-frontend` |
+| 启动后端 | `make dev-backend` |
+| 运行测试 | `make test` |
+| 代码检查 | `make lint && make typecheck` |
+| 构建 | `make build` |
+| 启动 UAT | `make uat-up` |
+
+默认访问地址：
+
+- Web：`http://localhost:8080`
+- API：`http://localhost:8000`
+- OpenAPI：`http://localhost:8000/docs`
+- MinIO Console：`http://localhost:9001`
 
 ## 工程规范
 

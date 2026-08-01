@@ -1,0 +1,48 @@
+{
+  "name": "@tree-creative/frontend",
+  "version": "0.1.0",
+  "private": true,
+  "description": "Tree Creative web application",
+  "packageManager": "pnpm@11.11.0",
+  "engines": {
+    "node": "23.11.0",
+    "pnpm": "11.11.0"
+  },
+  "scripts": {
+    "dev": "max dev",
+    "build": "max build",
+    "lint": "eslint --cache --ext .js,.ts,.tsx src vitest.config.ts && eslint --cache --no-ignore .umirc.ts",
+    "lint:fix": "pnpm lint --fix",
+    "typecheck": "tsc --noEmit",
+    "test": "vitest run",
+    "test:watch": "vitest",
+    "format": "prettier --cache --write .",
+    "format:check": "prettier --check .",
+    "postinstall": "max setup",
+    "setup": "max setup",
+    "start": "pnpm dev"
+  },
+  "dependencies": {
+    "@ant-design/icons": "6.3.2",
+    "@ant-design/pro-components": "2.8.10",
+    "@antv/g6": "5.1.1",
+    "@umijs/max": "4.6.84",
+    "antd": "5.29.3",
+    "echarts": "6.1.0",
+    "react": "18.3.1",
+    "react-dom": "18.3.1"
+  },
+  "devDependencies": {
+    "@testing-library/jest-dom": "7.0.0",
+    "@testing-library/react": "16.3.2",
+    "@types/react": "18.3.31",
+    "@types/react-dom": "18.3.7",
+    "eslint": "8.57.1",
+    "jsdom": "26.1.0",
+    "less": "4.8.1",
+    "prettier": "3.9.6",
+    "sass": "1.102.0",
+    "typescript": "5.0.4",
+    "vitest": "3.2.7"
+  }
+}

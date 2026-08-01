@@ -9,6 +9,10 @@ The format follows [Keep a Changelog](https://keepachangelog.com/en/1.1.0/), and
 ### Added
 
 - Repository governance and project foundation.
+- Umi Max and Ant Design Pro frontend foundation.
+- FastAPI modular backend with health checks, observability, Celery workers, and pluggable identity-provider ports.
+- MySQL, Redis, MinIO, API, workers, and frontend Docker Compose stack.
+- Frontend, backend, and Compose GitHub Actions quality gates.
 
 ### Changed
 

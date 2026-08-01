@@ -1,8 +1,7 @@
-# Replace the placeholder below with the GitHub team or user responsible for
-# repository-wide review, then remove the leading comment marker.
-# * @organization/repository-owners
+* @HuangHaohang
 
-# Add narrower ownership rules as stable module boundaries emerge.
-# /frontend/ @organization/frontend-owners
-# /backend/  @organization/backend-owners
-# /deploy/   @organization/platform-owners
+/frontend/ @HuangHaohang
+/backend/ @HuangHaohang
+/deploy/ @HuangHaohang
+/.github/ @HuangHaohang
+/agent-guides/ @HuangHaohang

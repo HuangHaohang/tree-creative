@@ -10,9 +10,7 @@ Before starting work, read [`agent-guides/README.md`](agent-guides/README.md). E
 
 ## Project State
 
-The repository governance baseline is initialized, but the application scaffold does not exist yet. Follow `agent-guides/tech-stack.md`; do not assume exact runtime versions or commands until the corresponding manifests and project files exist.
-
-When the stack is established, update this file with the real setup, development, test, lint, build, and release commands.
+The monorepo foundation is initialized with separate Umi Max frontend, FastAPI backend, Docker Compose deployment, and GitHub Actions CI. Follow `agent-guides/tech-stack.md` and the module-level READMEs when extending it.
 
 ## Working Principles
 
@@ -64,10 +62,15 @@ Summarize:
 
 ## Commands
 
-No project commands are defined yet. Replace this section once the initial toolchain is chosen:
-
-- Setup: TBD
-- Development: TBD
-- Test: TBD
-- Lint/format: TBD
-- Build: TBD
+- Setup: `make setup`
+- Frontend development: `make dev-frontend`
+- Backend development: `make dev-backend`
+- Worker development: `make worker`
+- Test: `make test`
+- Lint: `make lint`
+- Type checking: `make typecheck`
+- Format: `make format`
+- Verify formatting: `make format-check`
+- Build: `make build`
+- Validate Compose: `make compose-config`
+- Start/stop UAT: `make uat-up` / `make uat-down`

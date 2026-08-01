@@ -1,0 +1,176 @@
+name: ${COMPOSE_PROJECT_NAME:-tree-creative-uat}
+
+x-app-environment: &app-environment
+  APP_ENV: ${APP_ENV:-uat}
+  APP_NAME: tree-creative-api
+  LOG_LEVEL: ${LOG_LEVEL:-INFO}
+  DEBUG: ${DEBUG:-false}
+  DOCS_ENABLED: ${DOCS_ENABLED:-true}
+  MYSQL_URL: ${MYSQL_URL:?MYSQL_URL is required}
+  REDIS_URL: ${REDIS_URL:?REDIS_URL is required}
+  CELERY_BROKER_URL: ${CELERY_BROKER_URL:?CELERY_BROKER_URL is required}
+  CELERY_RESULT_BACKEND: ${CELERY_RESULT_BACKEND:?CELERY_RESULT_BACKEND is required}
+  LANGGRAPH_REDIS_URL: ${LANGGRAPH_REDIS_URL:?LANGGRAPH_REDIS_URL is required}
+  MINIO_ENDPOINT: ${MINIO_ENDPOINT:-minio:9000}
+  MINIO_ACCESS_KEY: ${MINIO_ACCESS_KEY:?MINIO_ACCESS_KEY is required}
+  MINIO_SECRET_KEY: ${MINIO_SECRET_KEY:?MINIO_SECRET_KEY is required}
+  MINIO_SECURE: ${MINIO_SECURE:-false}
+  MINIO_BUCKET: ${MINIO_BUCKET:-tree-creative}
+  SESSION_SECRET: ${SESSION_SECRET:?SESSION_SECRET is required}
+  ALLOWED_ORIGINS: ${ALLOWED_ORIGINS:-["http://localhost:8080"]}
+  ALLOWED_HOSTS: ${ALLOWED_HOSTS:-["localhost","127.0.0.1","api"]}
+
+x-backend: &backend
+  image: tree-creative-backend:local
+  build:
+    context: ..
+    dockerfile: backend/Dockerfile
+    target: runtime
+  restart: unless-stopped
+  environment: *app-environment
+  networks:
+    - application
+
+services:
+  mysql:
+    image: mysql:8.4.6
+    restart: unless-stopped
+    environment:
+      MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD:?MYSQL_ROOT_PASSWORD is required}
+      MYSQL_DATABASE: ${MYSQL_DATABASE:-tree_creative}
+      MYSQL_USER: ${MYSQL_USER:-tree_creative}
+      MYSQL_PASSWORD: ${MYSQL_PASSWORD:?MYSQL_PASSWORD is required}
+    command:
+      - --character-set-server=utf8mb4
+      - --collation-server=utf8mb4_0900_ai_ci
+    volumes:
+      - mysql-data:/var/lib/mysql
+    healthcheck:
+      test: ["CMD-SHELL", "mysqladmin ping -h 127.0.0.1 -uroot -p$$MYSQL_ROOT_PASSWORD --silent"]
+      interval: 10s
+      timeout: 5s
+      retries: 12
+    networks:
+      - application
+
+  redis:
+    image: redis:7.4.5-alpine
+    restart: unless-stopped
+    command: ["redis-server", "--appendonly", "yes", "--requirepass", "${REDIS_PASSWORD:?REDIS_PASSWORD is required}"]
+    volumes:
+      - redis-data:/data
+    healthcheck:
+      test: ["CMD-SHELL", "redis-cli -a $$REDIS_PASSWORD ping | grep PONG"]
+      interval: 10s
+      timeout: 5s
+      retries: 12
+    environment:
+      REDIS_PASSWORD: ${REDIS_PASSWORD:?REDIS_PASSWORD is required}
+    networks:
+      - application
+
+  minio:
+    image: minio/minio:RELEASE.2025-09-07T16-13-09Z
+    restart: unless-stopped
+    command: server /data --console-address ":9001"
+    environment:
+      MINIO_ROOT_USER: ${MINIO_ROOT_USER:?MINIO_ROOT_USER is required}
+      MINIO_ROOT_PASSWORD: ${MINIO_ROOT_PASSWORD:?MINIO_ROOT_PASSWORD is required}
+      MC_HOST_local: http://${MINIO_ROOT_USER}:${MINIO_ROOT_PASSWORD}@127.0.0.1:9000
+    volumes:
+      - minio-data:/data
+    ports:
+      - "${MINIO_API_PORT:-9000}:9000"
+      - "${MINIO_CONSOLE_PORT:-9001}:9001"
+    healthcheck:
+      test: ["CMD", "mc", "ready", "local"]
+      interval: 10s
+      timeout: 5s
+      retries: 12
+    networks:
+      - application
+
+  minio-init:
+    image: quay.io/minio/mc:RELEASE.2025-04-16T18-13-26Z
+    restart: "no"
+    depends_on:
+      minio:
+        condition: service_healthy
+    entrypoint: ["/bin/sh", "-c"]
+    command:
+      - >-
+        mc alias set local http://minio:9000 "$$MINIO_ROOT_USER" "$$MINIO_ROOT_PASSWORD" &&
+        mc mb --ignore-existing "local/$$MINIO_BUCKET"
+    environment:
+      MINIO_ROOT_USER: ${MINIO_ROOT_USER:?MINIO_ROOT_USER is required}
+      MINIO_ROOT_PASSWORD: ${MINIO_ROOT_PASSWORD:?MINIO_ROOT_PASSWORD is required}
+      MINIO_BUCKET: ${MINIO_BUCKET:-tree-creative}
+    networks:
+      - application
+
+  migrate:
+    <<: *backend
+    restart: "no"
+    command: ["alembic", "upgrade", "head"]
+    depends_on:
+      mysql:
+        condition: service_healthy
+
+  api:
+    <<: *backend
+    ports:
+      - "${API_PORT:-8000}:8000"
+    depends_on:
+      migrate:
+        condition: service_completed_successfully
+      redis:
+        condition: service_healthy
+      minio-init:
+        condition: service_completed_successfully
+
+  worker:
+    <<: *backend
+    command: ["celery", "-A", "tree_creative_api.tasks.celery_app:celery_app", "worker", "-Q", "default,langgraph", "--loglevel", "INFO"]
+    depends_on:
+      migrate:
+        condition: service_completed_successfully
+      redis:
+        condition: service_healthy
+      minio-init:
+        condition: service_completed_successfully
+
+  browser-worker:
+    <<: *backend
+    build:
+      context: ..
+      dockerfile: backend/Dockerfile
+      target: browser-worker
+    image: tree-creative-browser-worker:local
+    command: ["celery", "-A", "tree_creative_api.tasks.celery_app:celery_app", "worker", "-Q", "browser", "--loglevel", "INFO"]
+    shm_size: 1gb
+    depends_on:
+      worker:
+        condition: service_started
+
+  frontend:
+    image: tree-creative-frontend:local
+    build:
+      context: ..
+      dockerfile: frontend/Dockerfile
+    restart: unless-stopped
+    ports:
+      - "${FRONTEND_PORT:-8080}:80"
+    depends_on:
+      api:
+        condition: service_healthy
+    networks:
+      - application
+
+networks:
+  application:
+    driver: bridge
+
+volumes:
+  mysql-data:
+  redis-data:
+  minio-data:

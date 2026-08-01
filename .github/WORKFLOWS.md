@@ -1,8 +1,8 @@
 # GitHub Actions
 
-Workflow files belong in this directory, but no placeholder workflow may report success without running meaningful checks.
+The repository CI workflow validates frontend, backend, and Compose changes. No workflow may report success without running meaningful checks.
 
-Add CI/CD workflows together with the project scaffolding they validate. The required pipeline stages are:
+The delivery pipeline stages are:
 
 1. Repository policy and secret scanning.
 2. Frontend lint, type checking, unit tests, and production build.

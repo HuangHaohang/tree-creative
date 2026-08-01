@@ -5,14 +5,14 @@ This document records the approved baseline technology stack. Agents should use 
 ## Frontend
 
 - Language: TypeScript.
-- Runtime: a pinned Node.js LTS release.
-- Package manager: pnpm with a committed lockfile.
-- Application framework: Umi Max.
-- UI runtime: React.
-- Design system: Ant Design and Ant Design Pro / ProComponents.
-- Charts: Apache ECharts.
-- Graph visualization: AntV G6.
-- Unit and component testing: Vitest and React Testing Library.
+- Runtime: Node.js 23.11.0, matching the local development toolchain.
+- Package manager: pnpm 11.11.0 with a committed lockfile.
+- Application framework: Umi Max 4.6.84.
+- UI runtime: React 18.3.1.
+- Design system: Ant Design 5.29.3 and Ant Design Pro / ProComponents 2.8.10.
+- Charts: Apache ECharts 6.1.0.
+- Graph visualization: AntV G6 5.1.1.
+- Unit and component testing: Vitest 3.2.7 and React Testing Library 16.3.2.
 - End-to-end testing: Playwright.
 - Code quality: ESLint, Prettier, and TypeScript strict mode, using Umi defaults where available.
 - Supporting libraries: select task-specific libraries only when needed; prefer the Umi Max and Ant Design ecosystems before adding overlapping alternatives.
@@ -31,16 +31,16 @@ Do not select a package for an undecided category until its requirements are cle
 
 ## Backend
 
-- Language/runtime: Python 3; pin the project Python version during scaffolding.
-- Dependency and virtual-environment manager: uv with a committed lockfile.
-- API framework: FastAPI.
+- Language/runtime: Python 3.13.3.
+- Dependency and virtual-environment manager: uv 0.11.19 with a committed lockfile.
+- API framework: FastAPI 0.141.1.
 - Validation and configuration: Pydantic and Pydantic Settings.
-- Relational database: MySQL with SQLAlchemy 2.x.
+- Relational database: MySQL 8.4.6 with SQLAlchemy 2.0.51.
 - Database migrations: Alembic.
-- Cache, distributed coordination, and ephemeral state: Redis.
-- Object storage: MinIO using S3-compatible APIs.
-- Agent and workflow orchestration: LangGraph.
-- Browser automation: Playwright.
+- Cache, distributed coordination, and ephemeral state: Redis 7.4.5.
+- Object storage: MinIO `RELEASE.2025-09-07T16-13-09Z` using S3-compatible APIs.
+- Agent and workflow orchestration: LangGraph 1.2.10.
+- Browser automation: Playwright 1.62.0.
 - Unit and integration testing: pytest and pytest-asyncio.
 - Code quality: Ruff and mypy.
 
@@ -95,11 +95,12 @@ Authentication must use a ports-and-adapters design. Domain and application code
 ## Operations and Delivery
 
 - Source hosting and collaboration: GitHub.
-- CI/CD: GitHub Actions.
+- CI/CD: GitHub Actions with commit-pinned actions.
 - UAT environment: Docker on the local machine.
 - Production environment: Docker on the remote host available through the local SSH alias `server244`.
 - Deployment unit: a project-specific Docker Compose stack, isolated from other projects.
-- Reverse proxy and HTTPS: Caddy as the default edge proxy, with automated certificate renewal when public DNS is available.
+- Reverse proxy and HTTPS: Caddy 2.10.2 as the default edge proxy, with automated certificate renewal when public DNS is available.
+- Local container toolchain: Docker 29.5.2 and Docker Compose 5.1.4.
 
 Each environment must use separate configuration, credentials, storage, database names, network names, and Compose project names. Secrets must not be committed to the repository or embedded in images.
 
@@ -107,7 +108,7 @@ Production deployment must be reproducible from versioned Dockerfiles and Compos
 
 ## Repository Shape
 
-The exact repository layout is not decided. Unless project constraints require separate repositories, prefer a monorepo with clear boundaries such as:
+The repository uses a monorepo with clear boundaries:
 
 ```text
 frontend/       # Umi Max application
@@ -117,7 +118,7 @@ scripts/        # Repeatable development and operations scripts
 tests/          # Cross-service or end-to-end tests, when applicable
 ```
 
-This is a starting convention, not authorization to scaffold these directories before the project structure is requested.
+Create additional top-level areas only when they have a stable, distinct responsibility.
 
 ## Architecture and Engineering Defaults
 
@@ -137,7 +138,6 @@ This is a starting convention, not authorization to scaffold these directories b
 
 These values depend on infrastructure or product requirements and must be recorded when known:
 
-- Exact Node.js, Python, database, Redis, MinIO, browser, and direct dependency versions.
 - Production domain names, DNS, TLS exposure, ports, and network policy.
 - Initial SSO providers, their protocols and claim mappings, and local-login availability.
 - Initial roles, permissions, tenant model, administrator bootstrap, and audit retention.
@@ -146,9 +146,8 @@ These values depend on infrastructure or product requirements and must be record
 
 ## Version Policy
 
-Exact versions have not been selected yet. During scaffolding:
+Runtime and direct dependency versions are pinned through manifests, lockfiles, and container tags.
 
-- Pin runtime and direct dependency versions through manifests and lockfiles.
-- Prefer currently supported stable releases that are mutually compatible.
-- Record Node.js, Python, MySQL, Redis, MinIO, and Playwright runtime versions here.
+- Keep local development, CI, and container runtime versions aligned.
+- Prefer compatible stable releases; framework compatibility takes priority over installing the highest version number.
 - Upgrade intentionally through reviewed pull requests, with tests and migration notes where relevant.
