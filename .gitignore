@@ -1,0 +1,82 @@
+# Secrets and local configuration
+.env
+.env.*
+!.env.example
+!.env.*.example
+*.pem
+*.key
+*.p12
+*.pfx
+*.crt
+*.cer
+secrets/
+
+# JavaScript / TypeScript
+node_modules/
+.pnpm-store/
+.yarn/
+.npm/
+dist/
+build/
+.umi/
+.umi-production/
+.cache/
+.turbo/
+.eslintcache
+coverage/
+*.tsbuildinfo
+
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+.venv/
+venv/
+env/
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+.coverage
+.coverage.*
+htmlcov/
+*.egg-info/
+.eggs/
+wheelhouse/
+
+# Test and browser artifacts
+test-results/
+playwright-report/
+blob-report/
+playwright/.cache/
+downloads/
+
+# Runtime data
+/logs/
+*.log
+*.pid
+/tmp/
+/temp/
+/.local/
+/uploads/
+
+# Containers and local overrides
+compose.override.yml
+compose.*.override.yml
+docker-compose.override.yml
+docker-compose.*.override.yml
+
+# IDEs and operating systems
+.idea/
+.vscode/*
+!.vscode/extensions.json
+!.vscode/settings.json
+*.swp
+*.swo
+*~
+.DS_Store
+Thumbs.db
+
+# Local tooling
+.direnv/
+.envrc
+.tool-versions.local
