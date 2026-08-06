@@ -1,0 +1,280 @@
+.page {
+  position: relative;
+  min-height: 100vh;
+  overflow: hidden;
+  color: #24312d;
+  background: #f4f6f2;
+}
+
+.glowOne,
+.glowTwo {
+  position: absolute;
+  border-radius: 999px;
+  filter: blur(2px);
+  pointer-events: none;
+}
+
+.glowOne {
+  top: -240px;
+  right: -160px;
+  width: 620px;
+  height: 620px;
+  background: rgb(106 166 137 / 14%);
+}
+
+.glowTwo {
+  bottom: -260px;
+  left: 36%;
+  width: 520px;
+  height: 520px;
+  background: rgb(215 182 106 / 12%);
+}
+
+.shell {
+  position: relative;
+  z-index: 1;
+  display: grid;
+  grid-template-columns: minmax(420px, 1.08fr) minmax(420px, 0.92fr);
+  width: min(1180px, calc(100% - 64px));
+  min-height: min(760px, calc(100vh - 64px));
+  margin: 32px auto;
+  overflow: hidden;
+  background: rgb(255 255 255 / 84%);
+  border: 1px solid rgb(45 69 59 / 8%);
+  border-radius: 28px;
+  box-shadow: 0 30px 90px rgb(43 70 57 / 13%);
+  backdrop-filter: blur(24px);
+}
+
+.brandPanel {
+  display: flex;
+  flex-direction: column;
+  padding: 46px 54px;
+  color: #f5f8f5;
+  background:
+    radial-gradient(circle at 78% 22%, rgb(139 190 163 / 26%), transparent 34%),
+    linear-gradient(145deg, #173c31 0%, #245343 55%, #18392f 100%);
+}
+
+.brand,
+.mobileBrand {
+  display: flex;
+  align-items: center;
+  gap: 13px;
+  font-size: 20px;
+  font-weight: 650;
+  letter-spacing: -0.3px;
+}
+
+.brandMark {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 33px;
+  height: 33px;
+  transform: rotate(45deg);
+  border: 3px solid #8ed5b2;
+  border-radius: 9px;
+}
+
+.brandMark span {
+  width: 9px;
+  height: 9px;
+  background: #f4cb73;
+  border-radius: 50%;
+}
+
+.brandContent {
+  margin: auto 0;
+  padding: 70px 0;
+}
+
+.eyebrow {
+  color: #a9d6c1 !important;
+  font-size: 12px;
+  font-weight: 600;
+  letter-spacing: 2.6px;
+}
+
+.heroTitle {
+  margin: 22px 0 24px !important;
+  color: #fff !important;
+  font-size: clamp(40px, 4.4vw, 64px) !important;
+  font-weight: 560 !important;
+  line-height: 1.17 !important;
+  letter-spacing: -2.6px;
+}
+
+.heroDescription {
+  max-width: 450px;
+  margin: 0 !important;
+  color: rgb(237 246 241 / 72%) !important;
+  font-size: 17px;
+  line-height: 1.8;
+}
+
+.trustList {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px 22px;
+  color: rgb(235 246 240 / 68%);
+  font-size: 13px;
+}
+
+.trustList span {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+}
+
+.trustList :global(.anticon) {
+  color: #8ed5b2;
+}
+
+.loginPanel {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 56px 72px 36px;
+}
+
+.mobileBrand {
+  display: none;
+}
+
+.loginBox {
+  width: min(100%, 390px);
+}
+
+.securityIcon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 50px;
+  height: 50px;
+  margin-bottom: 26px;
+  color: #2b6652;
+  font-size: 22px;
+  background: #e7f2ec;
+  border: 1px solid #d7e9df;
+  border-radius: 15px;
+}
+
+.loginTitle {
+  margin: 0 0 9px !important;
+  color: #24312d !important;
+  font-size: 32px !important;
+  letter-spacing: -0.8px;
+}
+
+.loginDescription {
+  margin-bottom: 34px !important;
+  color: #7a8580 !important;
+  font-size: 15px;
+}
+
+.alert {
+  margin-bottom: 18px;
+  border-radius: 10px;
+}
+
+.loginButton {
+  height: 52px;
+  font-weight: 550;
+  background: #255c49;
+  border-color: #255c49;
+  border-radius: 11px;
+  box-shadow: 0 10px 24px rgb(37 92 73 / 20%);
+}
+
+.loginButton:not(:disabled):hover {
+  background: #1d4b3b !important;
+  border-color: #1d4b3b !important;
+}
+
+.retryButton {
+  height: 44px;
+  margin-top: 12px;
+  border-radius: 10px;
+}
+
+.securityNote {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  margin-top: 22px;
+  color: #919a96;
+  font-size: 12px;
+}
+
+.securityNote :global(.anticon) {
+  color: #6c9c87;
+}
+
+.copyright {
+  position: absolute;
+  bottom: 36px;
+  color: #a0a7a4 !important;
+  font-size: 11px;
+  letter-spacing: 0.2px;
+}
+
+@media (max-width: 900px) {
+  .shell {
+    display: block;
+    width: min(560px, calc(100% - 32px));
+    min-height: calc(100vh - 32px);
+    margin: 16px auto;
+  }
+
+  .brandPanel {
+    display: none;
+  }
+
+  .loginPanel {
+    min-height: calc(100vh - 34px);
+    padding: 36px 40px 28px;
+  }
+
+  .mobileBrand {
+    display: flex;
+    align-self: flex-start;
+    color: #264d40;
+  }
+
+  .mobileBrand .brandMark {
+    width: 28px;
+    height: 28px;
+    border-color: #3b8066;
+  }
+
+  .loginBox {
+    margin: auto 0;
+    padding: 60px 0;
+  }
+
+  .copyright {
+    position: static;
+    margin-top: 0;
+    padding-top: 0;
+  }
+}
+
+@media (max-width: 480px) {
+  .shell {
+    width: 100%;
+    min-height: 100vh;
+    margin: 0;
+    border: 0;
+    border-radius: 0;
+  }
+
+  .loginPanel {
+    min-height: 100vh;
+    padding: 28px 24px 24px;
+  }
+}

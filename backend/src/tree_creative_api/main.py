@@ -8,7 +8,7 @@ from fastapi.responses import JSONResponse
 from prometheus_fastapi_instrumentator import Instrumentator
 
 from tree_creative_api import __version__
-from tree_creative_api.api.router import api_router
+from tree_creative_api.api.router import api_router, integration_router
 from tree_creative_api.api.schemas import ErrorDetail, ErrorResponse, ServiceInfo
 from tree_creative_api.core.config import Settings, get_settings
 from tree_creative_api.core.errors import ApiError
@@ -35,13 +35,14 @@ def create_app(settings: Settings | None = None) -> FastAPI:
         allow_origins=resolved_settings.allowed_origins,
         allow_credentials=True,
         allow_methods=["GET", "POST", "PUT", "PATCH", "DELETE", "OPTIONS"],
-        allow_headers=["Authorization", "Content-Type", "X-Request-ID"],
+        allow_headers=["Authorization", "Content-Type", "X-CSRF-Token", "X-Request-ID"],
     )
     application.add_middleware(
         TrustedHostMiddleware,
         allowed_hosts=resolved_settings.allowed_hosts,
     )
     application.include_router(api_router, prefix=resolved_settings.api_v1_prefix)
+    application.include_router(integration_router)
 
     @application.get("/", response_model=ServiceInfo, tags=["system"])
     async def service_info() -> ServiceInfo:

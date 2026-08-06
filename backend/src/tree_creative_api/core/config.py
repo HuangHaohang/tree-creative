@@ -42,6 +42,16 @@ class Settings(BaseSettings):
     minio_bucket: str = "tree-creative"
 
     session_secret: SecretStr = SecretStr(_INSECURE_SESSION_SECRET)
+    frontend_base_url: str = "http://localhost:8080"
+    wps_gateway_base_url: str = "https://wps-sso.shueho.com"
+    wps_gateway_client_service: str = "tree-creative"
+    wps_gateway_client_secret: SecretStr = SecretStr("")
+    wps_gateway_redirect_uri: str = "http://localhost:8000/api/oauth/callback"
+    auth_session_cookie_name: str = "tree_creative_session"
+    auth_session_ttl_seconds: int = 28_800
+    auth_login_state_ttl_seconds: int = 600
+    auth_token_verify_interval_seconds: int = 300
+    auth_token_refresh_leeway_seconds: int = 120
 
     @model_validator(mode="after")
     def reject_insecure_production_defaults(self) -> Self:
@@ -50,7 +60,17 @@ class Settings(BaseSettings):
             and self.session_secret.get_secret_value() == _INSECURE_SESSION_SECRET
         ):
             raise ValueError("SESSION_SECRET must be replaced in production")
+        if self.app_env == "production" and not self.wps_gateway_client_secret.get_secret_value():
+            raise ValueError("WPS_GATEWAY_CLIENT_SECRET is required in production")
         return self
+
+    @property
+    def auth_session_cookie_secure(self) -> bool:
+        return self.app_env == "production"
+
+    @property
+    def auth_redis_key_prefix(self) -> str:
+        return f"tree-creative:{self.app_env}:auth"
 
 
 @lru_cache

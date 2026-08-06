@@ -12,13 +12,27 @@ export default defineConfig({
   },
   routes: [
     {
+      path: '/login',
+      component: './Login',
+      layout: false,
+    },
+    {
       path: '/',
       redirect: '/home',
     },
     {
       name: '首页',
+      icon: 'home',
       path: '/home',
       component: './Home',
+      wrappers: ['@/features/auth/components/AuthGuard'],
+    },
+    {
+      name: '组织通讯录',
+      icon: 'team',
+      path: '/organization',
+      component: './Organization',
+      wrappers: ['@/features/auth/components/AuthGuard'],
     },
   ],
   proxy: {

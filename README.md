@@ -19,6 +19,7 @@
 | --- | --- |
 | 产品定义 | 待补充 |
 | 系统架构 | 前后端分层基础框架已初始化 |
+| 企业认证 | WPS SSO 网关、Redis 服务端会话和组织通讯录已接入 |
 | 开发环境 | 可用 |
 | UAT | 本机 Docker Compose，配置已就绪 |
 | Production | `server244` Docker，待部署配置完成 |
@@ -57,6 +58,8 @@ cp .env.example .env
 make setup
 ```
 
+启动前需在服务端运行环境配置 `WPS_GATEWAY_CLIENT_SECRET`。真实密钥不得写入仓库、前端代码、构建参数或日志。
+
 分别启动前后端开发服务：
 
 ```bash
@@ -80,6 +83,8 @@ make dev-frontend
 - API：`http://localhost:8000`
 - OpenAPI：`http://localhost:8000/docs`
 - MinIO Console：`http://localhost:9001`
+
+WPS SSO 登录入口为 `GET /api/auth/wps/login`；当前用户、真实服务端登出和组织通讯录分别由 `/api/auth/me`、`/api/auth/logout` 和 `/api/organization/*` 提供。
 
 ## 工程规范
 

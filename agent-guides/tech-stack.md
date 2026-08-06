@@ -79,7 +79,8 @@ Authentication must use a ports-and-adapters design. Domain and application code
 ### SSO Adapters
 
 - Define a stable `IdentityProvider` or equivalent interface for login initiation, callback handling, claims normalization, logout, and optional token refresh.
-- Implement OpenID Connect as the first generic SSO adapter. Add vendor-specific OIDC adapters only for provider quirks or additional capabilities.
+- Use the WPS SSO gateway adapter as the initial production identity integration. Keep its gateway protocol and credentials inside the infrastructure adapter.
+- Implement OpenID Connect as the first generic additional SSO adapter when another provider is introduced. Add vendor-specific OIDC adapters only for provider quirks or additional capabilities.
 - Allow future SAML 2.0 or other enterprise SSO adapters without changing domain services, RBAC evaluation, or the internal user model.
 - Load provider configuration through environment or secret management and a provider registry. Do not scatter provider conditionals through routes or business code.
 - Make account linking, just-in-time provisioning, disabled-user handling, claim mapping, and logout behavior explicit per adapter.
@@ -139,7 +140,7 @@ Create additional top-level areas only when they have a stable, distinct respons
 These values depend on infrastructure or product requirements and must be recorded when known:
 
 - Production domain names, DNS, TLS exposure, ports, and network policy.
-- Initial SSO providers, their protocols and claim mappings, and local-login availability.
+- Additional SSO providers, their protocols and claim mappings, and local-login availability.
 - Initial roles, permissions, tenant model, administrator bootstrap, and audit retention.
 - Backup destinations, retention periods, recovery objectives, alert destinations, and incident contacts.
 - LangGraph checkpoint implementation and data-retention duration.

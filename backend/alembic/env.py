@@ -7,6 +7,7 @@ from sqlalchemy.ext.asyncio import async_engine_from_config
 from alembic import context
 from tree_creative_api.core.config import get_settings
 from tree_creative_api.infrastructure.database import Base
+from tree_creative_api.modules.auth import models as auth_models  # noqa: F401
 
 config = context.config
 if config.config_file_name is not None:
