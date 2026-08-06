@@ -43,6 +43,6 @@
     "prettier": "3.9.6",
     "sass": "1.102.0",
     "typescript": "5.0.4",
-    "vitest": "3.2.7"
+    "vitest": "4.1.10"
   }
 }
