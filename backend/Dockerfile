@@ -2,7 +2,7 @@
 
 FROM ghcr.io/astral-sh/uv:0.11.19 AS uv
 
-FROM python:3.13.3-slim-bookworm AS builder
+FROM python:3.14.0-slim-bookworm AS builder
 COPY --from=uv /uv /uvx /bin/
 ENV UV_COMPILE_BYTECODE=1 UV_LINK_MODE=copy
 WORKDIR /app
@@ -18,7 +18,7 @@ FROM builder AS browser-builder
 RUN --mount=type=cache,target=/root/.cache/uv \
   uv sync --frozen --no-dev --extra browser
 
-FROM python:3.13.3-slim-bookworm AS runtime
+FROM python:3.14.0-slim-bookworm AS runtime
 ENV PATH="/app/.venv/bin:$PATH" PYTHONUNBUFFERED=1 PYTHONDONTWRITEBYTECODE=1
 RUN groupadd --system app && useradd --system --gid app --home-dir /app app
 WORKDIR /app
