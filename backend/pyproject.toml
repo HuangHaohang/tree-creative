@@ -4,27 +4,27 @@ version = "0.1.0"
 description = "Tree Creative FastAPI service"
 requires-python = ">=3.13.3"
 dependencies = [
-    "alembic==1.18.5",
+    "alembic==1.20.0",
     "asgi-correlation-id==5.0.1",
-    "asyncmy==0.2.11",
-    "authlib==1.7.2",
+    "asyncmy==0.2.14",
+    "authlib==1.8.0",
     "celery[redis]==5.6.3",
     "email-validator==2.3.0",
     "fastapi==0.141.1",
     "httpx==0.28.1",
-    "langgraph==1.2.10",
-    "langgraph-checkpoint-redis==0.5.1",
+    "langgraph==1.2.11",
+    "langgraph-checkpoint-redis==0.5.2",
     "minio==7.2.20",
     "prometheus-client==0.26.0",
     "prometheus-fastapi-instrumentator==8.1.0",
-    "pwdlib[argon2]==0.3.0",
-    "pydantic-settings==2.14.2",
-    "pyjwt[crypto]==2.13.0",
+    "pwdlib[argon2]==0.3.1",
+    "pydantic-settings==2.15.0",
+    "pyjwt[crypto]==2.14.0",
     "python-multipart==0.0.32",
     "redis==6.4.0",
-    "sqlalchemy[asyncio]==2.0.51",
+    "sqlalchemy[asyncio]==2.0.54",
     "structlog==26.1.0",
-    "uvicorn[standard]==0.52.0",
+    "uvicorn[standard]==0.53.0",
 ]
 
 [project.scripts]
@@ -32,7 +32,7 @@ tree-creative-api = "tree_creative_api.main:run"
 
 [project.optional-dependencies]
 browser = [
-    "playwright==1.62.0",
+    "playwright==1.63.0",
 ]
 
 [build-system]
@@ -78,10 +78,10 @@ disallow_untyped_decorators = false
 
 [dependency-groups]
 dev = [
-    "httpx2==2.9.1",
-    "mypy==2.3.0",
+    "httpx2==2.13.0",
+    "mypy==2.3.1",
     "pytest==9.1.1",
     "pytest-asyncio==1.4.0",
     "pytest-cov==7.1.0",
-    "ruff==0.16.1",
+    "ruff==0.16.8",
 ]
