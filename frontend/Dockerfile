@@ -1,6 +1,6 @@
 # syntax=docker/dockerfile:1.7
 
-FROM node:23.11.0-bookworm-slim AS builder
+FROM node:26.11.1-bookworm-slim AS builder
 ENV PNPM_HOME=/pnpm PATH=/pnpm:$PATH
 WORKDIR /workspace
 RUN corepack enable && corepack prepare pnpm@11.11.0 --activate
