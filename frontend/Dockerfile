@@ -12,7 +12,7 @@ RUN --mount=type=cache,id=pnpm,target=/pnpm/store \
 COPY frontend ./frontend
 RUN pnpm --dir frontend build
 
-FROM caddy:2.10.2-alpine AS runtime
+FROM caddy:2.11.6-alpine AS runtime
 COPY frontend/Caddyfile /etc/caddy/Caddyfile
 COPY --from=builder /workspace/frontend/dist /srv
 EXPOSE 80
